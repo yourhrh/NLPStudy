@@ -35,7 +35,8 @@ public class GrammarFactory {
 			while ((line = in.readLine()) != null) {
 				ArrayList<String> parsedGrammar = parseLine(line);
 				if (parsedGrammar.size() == 2) {
-					grammars.add(makeGrammar(parsedGrammar.get(0), parsedGrammar.get(1), null));
+					
+					grammars.add(makeGrammar(parsedGrammar.get(0), null, parsedGrammar.get(1)));
 				}
 				else
 					grammars.add(makeGrammar(parsedGrammar.get(0), parsedGrammar.get(1), parsedGrammar.get(2)));

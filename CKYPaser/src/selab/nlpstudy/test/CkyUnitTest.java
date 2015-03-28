@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import selab.nlpstudy.data.CkyData;
+import selab.nlpstudy.data.CkyList;
+import selab.nlpstudy.data.RewriteController;
 import selab.nlpstudy.grammer.Grammar;
 import selab.nlpstudy.grammer.GrammarFactory;
 
@@ -38,12 +40,23 @@ public class CkyUnitTest {
 		
 		assertTrue(grammars.size() == 15);
 		
-		CkyData cky = new CkyData(0,1,"with");
+		
+		
+		
+		
+		CkyData cky = new CkyData(0,1);
 		cky.addData("with");
-		cky.rewrite(grammars);
+		cky.singleRewrite(grammars);
 		ArrayList<String> expectedRewirte = new ArrayList<String>();
 		expectedRewirte.add("with");expectedRewirte.add("P");
 		assertEquals(expectedRewirte,cky.getCkyDatas());
+		
+		RewriteController rewriteController = new RewriteController(grammars);
+		assertTrue(CkyList.getInstance().get(0).get(0).getCkyDatas().contains("the"));
+		assertEquals(CkyList.getInstance().get(0).get(0).getEnd(),1);
+		
+		rewriteController.rewrite();
+		assertTrue(CkyList.getInstance().get(1).get(0).getCkyDatas().contains("NP"));
 	}
 
 }
