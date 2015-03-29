@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import selab.nlpstudy.grammer.Grammar;
+import selab.nlpstudy.grammer.GrammarFactory.Grammars;
 
 public class RewriteController {
-	private ArrayList<Grammar> grammars;
+	private Grammars grammars;
 	
-	public RewriteController(ArrayList<Grammar> grammars){
+	public RewriteController(Grammars grammars){
 		this.grammars = grammars;
 		initCkyList();
 	}
@@ -19,29 +20,33 @@ public class RewriteController {
 	public void rewrite() {
 		// TODO Auto-generated method stub
 		
-		for(int j=0;j< CkyList.getInstance().size(); j++)
-			for(int i = j;i<CkyList.getInstance().size();i++){
-				CkyList.getInstance().get(i).get(i-j).rewrite(grammars);
+//		for(int j=0;j< CkyList.getInstance().size(); j++){
+//			   for(int i = 0;i<CkyList.getInstance().size()-j;i++){
+//			      CkyList.getInstance().get(i+j).get(i).rewrite(grammars);
+//			   }
+//			}
+		
+		for(ArrayList<CkyData> dataEachLength : CkyList.getInstance()){
+			for(CkyData ckyData : dataEachLength){
+				ckyData.rewrite(grammars);
 			}
+		}
 	}
 	public void initCkyList(){
 		try {
 			BufferedReader in = new BufferedReader(new FileReader("./input.txt"));
 			String inputText = in.readLine();
 			String[] parsedInput = inputText.split("\\s+");
-			for(int i = 0;i<parsedInput.length; i++){
-				ArrayList<CkyData> endCkys = new ArrayList<CkyData>();
-				CkyList.getInstance().add(endCkys);
-				for(int j= i; j>=0; j--){
-					//end 는 1부터 시작한다.
-					CkyData data = new CkyData(j,i+1);
-					// 단일 칸일 경우(단어 하나가 들어가는 경우 단어를 넣어 초기화)
-					if(j == i){
-						data.addData(parsedInput[i]);
-					}
-					
-					endCkys.add(data);
+			
+			for(int length = 1;length<=parsedInput.length; length++){
+				ArrayList<CkyData> dataEachLength = new ArrayList<CkyData>();
+				for(int start=0;start<parsedInput.length-length+1;start++){
+					CkyData insertCkyData = new CkyData(start,start+length);
+					if(length == 1)
+						insertCkyData.addData(parsedInput[start]);
+					dataEachLength.add(insertCkyData);
 				}
+				CkyList.getInstance().add(dataEachLength);
 			}
 			
 		} catch (FileNotFoundException e) {

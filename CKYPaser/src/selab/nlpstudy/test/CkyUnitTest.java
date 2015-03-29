@@ -11,34 +11,34 @@ import selab.nlpstudy.data.CkyList;
 import selab.nlpstudy.data.RewriteController;
 import selab.nlpstudy.grammer.Grammar;
 import selab.nlpstudy.grammer.GrammarFactory;
+import selab.nlpstudy.grammer.GrammarFactory.Grammars;
 
 public class CkyUnitTest {
 
 	@Test
 	public void test() {
 		//grammer 
-		Grammar sGrammer = GrammarFactory.makeGrammar("S","NP","VP");
-		
-		assertEquals(null, sGrammer.test("NP", "abc"));
-		
-		Grammar singleGrammar = GrammarFactory.makeGrammar("VP", null,"V");
-		
-		assertEquals("VP", singleGrammar.test(null,"V"));
-		
-		// parse 만들고 private로 변경
-//		String S = "S -> NP VP";
+//		Grammar sGrammer = GrammarFactory.makeGrammar("S","NP","VP");
 //		
-//		ArrayList<String> parseGString = GrammarFactory.parseLine(S);
-//		ArrayList<String> expect = new ArrayList<String>();
-//		expect.add("S");expect.add("NP");expect.add("VP");
+//		assertEquals(null, sGrammer.test("NP", "abc"));
 //		
-//		assertEquals(parseGString, expect);
+//		Grammar singleGrammar = GrammarFactory.makeGrammar("VP", null,"V");
+//		
+//		assertEquals("VP", singleGrammar.test(null,"V"));
+//		
+//		// parse 만들고 private로 변경
+////		String S = "S -> NP VP";
+////		
+////		ArrayList<String> parseGString = GrammarFactory.parseLine(S);
+////		ArrayList<String> expect = new ArrayList<String>();
+////		expect.add("S");expect.add("NP");expect.add("VP");
+////		
+////		assertEquals(parseGString, expect);
+//		
+//		///file 읽어 grammer 만들기
+//		
+		Grammars grammars = GrammarFactory.makeGrammars();
 		
-		///file 읽어 grammer 만들기
-		
-		ArrayList<Grammar> grammars = GrammarFactory.makeGrammars();
-		
-		assertTrue(grammars.size() == 15);
 		
 		
 		
@@ -46,7 +46,7 @@ public class CkyUnitTest {
 		
 		CkyData cky = new CkyData(0,1);
 		cky.addData("with");
-		cky.singleRewrite(grammars);
+		cky.singleRewrite(grammars.getSingleGrammars());
 		ArrayList<String> expectedRewirte = new ArrayList<String>();
 		expectedRewirte.add("with");expectedRewirte.add("P");
 		assertEquals(expectedRewirte,cky.getCkyDatas());
@@ -57,6 +57,7 @@ public class CkyUnitTest {
 		
 		rewriteController.rewrite();
 		assertTrue(CkyList.getInstance().get(1).get(0).getCkyDatas().contains("NP"));
+		assertTrue(CkyList.getInstance().get(7).get(0).getCkyDatas().contains("S"));
 	}
 
 }
