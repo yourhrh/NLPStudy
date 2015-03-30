@@ -7,22 +7,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import selab.nlpstudy.data.CkyList;
+
 public class GrammarFactory {
 
 	private static Grammar makeGrammar(String result,String inOrder, String secondOrder) {
 		// TODO Auto-generated method stub
 		return (string,string1) -> {
-		
-			if(string.equals(inOrder) && string1.equals(secondOrder))
-				return result;
+			String compareString = string.split("\\s+")[0];
+			String compareString1 = string1.split("\\s+")[0];
+			if(compareString.equals(inOrder) && compareString1.equals(secondOrder)){
+				CkyList.getInstance().addUsingGrammar(result + " -> " +compareString + " " + compareString1);
+				return result + " (" + string + " " + string1+")";
+			}
 			return null;
 		};
 		
 	}
 	private static SingleGrammar makeSingleGrammar(String result,String data){
 		return string -> {
-			if(string.equals(data))
-				return result;
+			String compareString = string.split("\\s+")[0];
+			if(compareString.equals(data)){
+				CkyList.getInstance().addUsingGrammar(result + " -> " +compareString);
+				return result + " " + string;
+			}
 			return null;
 		};
 	}

@@ -19,35 +19,26 @@ public class RewriteController {
 
 	public void rewrite() {
 		// TODO Auto-generated method stub
-		
-//		for(int j=0;j< CkyList.getInstance().size(); j++){
-//			   for(int i = 0;i<CkyList.getInstance().size()-j;i++){
-//			      CkyList.getInstance().get(i+j).get(i).rewrite(grammars);
-//			   }
-//			}
-		
-		for(ArrayList<CkyData> dataEachLength : CkyList.getInstance()){
-			for(CkyData ckyData : dataEachLength){
-				ckyData.rewrite(grammars);
-			}
+		for(CkyData ckyData : CkyList.getInstance()){
+			ckyData.rewrite(grammars);
 		}
+		CkyList.getInstance().writeOutput();
 	}
 	public void initCkyList(){
 		try {
 			BufferedReader in = new BufferedReader(new FileReader("./input.txt"));
 			String inputText = in.readLine();
 			String[] parsedInput = inputText.split("\\s+");
-			
-			for(int length = 1;length<=parsedInput.length; length++){
-				ArrayList<CkyData> dataEachLength = new ArrayList<CkyData>();
-				for(int start=0;start<parsedInput.length-length+1;start++){
-					CkyData insertCkyData = new CkyData(start,start+length);
+			//length 순서대로 생성
+			CkyList.getInstance().setSentenceLength(parsedInput.length);
+			for(int length=1;length<parsedInput.length+1;length++)
+				for(int j=0;j<=parsedInput.length-length;j++){
+					CkyData ckyData = new CkyData(j, j+length);
 					if(length == 1)
-						insertCkyData.addData(parsedInput[start]);
-					dataEachLength.add(insertCkyData);
+						ckyData.addData(parsedInput[j]);
+					CkyList.getInstance().add(ckyData);
+					
 				}
-				CkyList.getInstance().add(dataEachLength);
-			}
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
