@@ -17,6 +17,7 @@ public class CkyUnitTest {
 
 	@Test
 	public void test() {
+		//test remove
 		//grammer 
 //		Grammar sGrammer = GrammarFactory.makeGrammar("S","NP","VP");
 //		
@@ -37,7 +38,7 @@ public class CkyUnitTest {
 //		
 //		///file 읽어 grammer 만들기
 //		
-		Grammars grammars = GrammarFactory.makeGrammars();
+//		Grammars grammars = GrammarFactory.makeGrammars();
 		
 		
 		
@@ -51,11 +52,11 @@ public class CkyUnitTest {
 //		expectedRewirte.add("with");expectedRewirte.add("P");
 //		assertEquals(expectedRewirte,cky.getCkyDatas());
 		
-		RewriteController rewriteController = new RewriteController(grammars);
+//		RewriteController rewriteController = new RewriteController(grammars);
 //		assertTrue(CkyList.getInstance().get(0).get(0).getCkyDatas().contains("the"));
 //		assertEquals(CkyList.getInstance().get(0).get(0).getEnd(),1);
 //		
-		rewriteController.rewrite();
+//		rewriteController.rewrite();
 //		assertTrue(CkyList.getInstance().get(1).get(0).getCkyDatas().contains("NP"));
 //		assertTrue(CkyList.getInstance().get(7).get(0).getCkyDatas().contains("S"));
 	}

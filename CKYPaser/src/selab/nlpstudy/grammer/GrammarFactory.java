@@ -18,7 +18,7 @@ public class GrammarFactory {
 			String compareString1 = string1.split("\\s+")[0];
 			if(compareString.equals(inOrder) && compareString1.equals(secondOrder)){
 				CkyList.getInstance().addUsingGrammar(result + " -> " +compareString + " " + compareString1);
-				return result + " (" + string + " " + string1+")";
+				return result + " (" + string + ") (" + string1+")";
 			}
 			return null;
 		};
