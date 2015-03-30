@@ -44,13 +44,17 @@ public class CkyData {
 			//끝이 second의 시작인 원소들 end는 +1이기 떄문에 
 			
 			if(end-start-i-2 >= 0){
+				
 				CkyData secondOrder = CkyList.getInstance().get(i).get(end-i-1);
 				secondOrders.add(secondOrder);
-				firstOrders.add(CkyList.getInstance().get(end-start-i-2).get(secondOrder.getStart()));	
+				firstOrders.add(CkyList.getInstance().get(end-start-i-2).get(secondOrder.getStart()-1));
 			}
-			
+				
 		}
+			
+		
 		for(int i=0;i<secondOrders.size();i++){
+			
 			CkyData firstOrder = firstOrders.get(i);
 			CkyData secondOrder = secondOrders.get(i);
 			for(int j=0;j<firstOrder.getCkyDatas().size();j++){
@@ -66,6 +70,9 @@ public class CkyData {
 					}
 				}
 			}
+			
+			
+			
 		}
 		
 		//혼자 변 할 수 있는 데이터 들을 변환 시킴 
