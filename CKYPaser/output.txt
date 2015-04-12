@@ -1,0 +1,20 @@
+DT -> the
+N -> man
+V -> man
+V -> saw
+N -> saw
+DT -> the
+N -> boy
+V -> boy
+P -> with
+DT -> the
+N -> telescope
+NP -> DT N
+NP -> DT N
+NP -> DT N
+VP -> V NP
+PP -> P NP
+S -> NP VP
+VP -> VP PP
+S -> NP VP
+S (NP (DT the) (N man)) (VP (VP (V saw) (NP (DT the) (N boy))) (PP (P with) (NP (DT the) (N telescope))))
