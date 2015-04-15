@@ -21,12 +21,11 @@ public class Edge {
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		Edge compareEdge = (Edge)obj;
-		if(start == compareEdge.start&&end == compareEdge.end && 
-				compareEdge.target.equals(target)&&notMaking.equals(compareEdge.notMaking)&&
-				making.equals(compareEdge.making)){
-			return true;
-		}
-		return false;
+		return start == compareEdge.start&&end == compareEdge.end && 
+				compareEdge.target.equals(target)&&
+				(compareEdge.notMaking == notMaking || compareEdge.notMaking.equals(notMaking))&&
+				(compareEdge.making == making || compareEdge.making.equals(making));
+
 	}
 	public int getStart() {
 		return start;
@@ -39,6 +38,18 @@ public class Edge {
 	}
 	public List<String> getNotMaking() {
 		return notMaking;
+	}
+	@Override
+	public String toString(){
+		
+		String notToString = "";
+		String makingToString = "";
+		if(notMaking != null)
+			notToString = notMaking.toString();
+		if(making != null)
+			makingToString = making.toString(); 
+		
+		return start + " " + end + " "  + target + "\n" + notToString + "\n" + makingToString; 
 	}
 
 

@@ -1,5 +1,5 @@
 S -> NP VP NP
-S ->NP VP
+S -> NP VP
 VP -> VP NP PP
 VP -> VP PP
 NP -> DT NP

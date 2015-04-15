@@ -72,10 +72,11 @@ public class TestCase {
 		ArrayList<String> sGrammar = new ArrayList<String>();
 		sGrammar.add("NP");
 		sGrammar.add("VP");
-		expectedPC.add(new Edge(0,0,"S",new ArrayList<String>(),testData));
-		expectedPC.add(new Edge(0, 0, "S", new ArrayList<String>(), sGrammar));
+		expectedPC.add(new Edge(0,0,"S",null,testData));
+		expectedPC.add(new Edge(0, 0, "S", null, sGrammar));		
 		
 		assertEquals(expectedPC, pendingChart.getProcessQueue());
+		
 		
 		
 		
@@ -88,7 +89,8 @@ public class TestCase {
 		parsingController.prcess3(edge);
 		ArrayList<String> expectedNotMaking = new ArrayList<String>();
 		expectedNotMaking.add("n");
-		assertTrue(pendingChart.getProcessQueue().contains(new Edge(0,0,"NP",new ArrayList<String>(),expectedNotMaking)));
+		System.out.println(pendingChart.getProcessQueue().toString());
+		assertTrue(pendingChart.getProcessQueue().contains(new Edge(0,0,"NP",null,expectedNotMaking)));
 	}
 	
 

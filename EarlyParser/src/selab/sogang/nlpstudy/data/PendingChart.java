@@ -32,5 +32,9 @@ public class PendingChart {
 	public Queue<Edge> getProcessQueue() {
 		return processQueue;
 	}
+	public void add(Edge edge) {
+		// TODO Auto-generated method stub
+		processQueue.add(edge);
+	}
 
 }

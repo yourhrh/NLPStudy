@@ -6,16 +6,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import selab.nlpstudy.grammer.Grammar;
 import selab.sogang.nlpstudy.data.CompleteChart;
 import selab.sogang.nlpstudy.data.Edge;
+import selab.sogang.nlpstudy.data.PendingChart;
 
 public class ParsingController {
 	
 	ArrayList<Grammar> grammars;
-	Queue<Edge> pendingChart;
 	public ParsingController(ArrayList<Grammar> grammars) {
 		// TODO Auto-generated constructor stub
 		this.grammars = grammars;
@@ -39,7 +40,7 @@ public class ParsingController {
 				for(Grammar grammar : grammars){
 					String lhs = grammar.convertToLhs(rhs);
 					if(lhs != null)
-						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, rhs, new ArrayList<String>()));
+						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, rhs,null));
 				}
 					
 			}
@@ -53,12 +54,8 @@ public class ParsingController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		pendingChart = new LinkedList<Edge>();
 		
 
-	}
-	public Queue<Edge> getPendingChart() {
-		return pendingChart;
 	}
 
 
@@ -70,8 +67,15 @@ public class ParsingController {
 
 	public void prcess3(Edge edge) {
 		// TODO Auto-generated method stub
-		
+		String u1 = edge.getNotMaking().get(0);
+		for(Grammar grammar : grammars){
+			List<String> pendingRhs = grammar.convertToRhs(u1);
+			if(pendingRhs != null){
+				PendingChart.getInstance().add(new Edge(edge.getEnd(), edge.getEnd(), u1,null, pendingRhs)); 
+			}
+		}
 	}
+	
 	
 	
 	
