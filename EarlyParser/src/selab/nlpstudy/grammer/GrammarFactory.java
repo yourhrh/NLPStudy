@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GrammarFactory {
 
@@ -48,10 +49,24 @@ public class GrammarFactory {
 
 	public static Grammar makeGrammar(ArrayList<String> newGrammar) {
 		// TODO Auto-generated method stub
-		return lhs -> {
-			if(newGrammar.get(0).equals(lhs))
-				return newGrammar.subList(1, newGrammar.size());
-			return null;
+		return new Grammar() {
+			
+			@Override
+			public List<String> convertToRhs(String lhs) {
+
+				if(newGrammar.get(0).equals(lhs))
+					return newGrammar.subList(1, newGrammar.size());
+				return null;
+			
+			}
+			
+			@Override
+			public String convertToLhs(List<String> rhs) {
+				// TODO Auto-generated method stub
+				if(newGrammar.subList(1, newGrammar.size()).equals(rhs))
+					return newGrammar.get(0);
+				return null;
+			}
 		};
 			
 	}

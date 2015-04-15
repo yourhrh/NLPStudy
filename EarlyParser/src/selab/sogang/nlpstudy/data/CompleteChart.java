@@ -26,8 +26,10 @@ public class CompleteChart {
 		// TODO Auto-generated constructor stub
 		completeEdges = new ArrayList<ArrayList<ArrayList<Edge>>>();
 	}
+	
 	public void addEdges(Edge edge){
 		
+		completeEdges.get(edge.getStart()).get(edge.getEnd()).add(edge);
 	}
 	
 	public void initCompleteEdges(int size){
@@ -37,6 +39,9 @@ public class CompleteChart {
 				addingArray.add(new ArrayList<Edge>());
 			completeEdges.add(addingArray);
 		}
+	}
+	public ArrayList<Edge> getData(int start,int end){
+		return completeEdges.get(start).get(end);
 	}
 
 }

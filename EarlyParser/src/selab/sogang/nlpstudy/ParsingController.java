@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import selab.nlpstudy.grammer.Grammar;
 import selab.sogang.nlpstudy.data.CompleteChart;
@@ -13,13 +15,10 @@ import selab.sogang.nlpstudy.data.Edge;
 public class ParsingController {
 	
 	ArrayList<Grammar> grammars;
+	Queue<Edge> pendingChart;
 	public ParsingController(ArrayList<Grammar> grammars) {
 		// TODO Auto-generated constructor stub
 		this.grammars = grammars;
-	}
-	public void initCompleteChart() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	
@@ -34,8 +33,18 @@ public class ParsingController {
 			CompleteChart.getInstance().initCompleteEdges(parsedInput.length+1);
 			
 			for(int i=0;i<parsedInput.length;i++){
-				CompleteChart.getInstance().addEdges(new Edge());
+				
+				ArrayList<String> rhs = new ArrayList<String>();
+				rhs.add(parsedInput[i]);
+				for(Grammar grammar : grammars){
+					String lhs = grammar.convertToLhs(rhs);
+					if(lhs != null)
+						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, rhs, new ArrayList<String>()));
+				}
+					
 			}
+			
+			
 			
 		}catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -44,11 +53,26 @@ public class ParsingController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	private ArrayList<Edge> makeEdges(int start,int end,String lhs,ArrayList<Grammar> grammars){
+		pendingChart = new LinkedList<Edge>();
 		
+
+	}
+	public Queue<Edge> getPendingChart() {
+		return pendingChart;
+	}
+
+
+	public ArrayList<Grammar> getGrammars() {
+		// TODO Auto-generated method stub
+		return grammars;
+	}
+
+
+	public void prcess3(Edge edge) {
+		// TODO Auto-generated method stub
 		
 	}
+	
 	
 	
 
