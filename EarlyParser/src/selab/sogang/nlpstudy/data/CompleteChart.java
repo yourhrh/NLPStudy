@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class CompleteChart {
+public class CompleteChart extends ArrayList<ArrayList<ArrayList<Edge>>>{
 	
-	private ArrayList<ArrayList<ArrayList<Edge>>> completeEdges;
 
 	private static class CCInstanceHolder {
 		private static CompleteChart theUniqueCC = new CompleteChart();
@@ -24,12 +23,15 @@ public class CompleteChart {
 	
 	private CompleteChart() {
 		// TODO Auto-generated constructor stub
-		completeEdges = new ArrayList<ArrayList<ArrayList<Edge>>>();
+		super();
 	}
 	
 	public void addEdges(Edge edge){
 		
-		completeEdges.get(edge.getStart()).get(edge.getEnd()).add(edge);
+		this.get(edge.getStart()).get(edge.getEnd()).add(edge);
+
+		System.out.println(edge.getStart() +"  " +  edge.getEnd() + " "+ edge.getTarget()+ " \n" +edge.getMaking()
+				+ edge.getNotMaking());
 	}
 	
 	public void initCompleteEdges(int size){
@@ -37,11 +39,14 @@ public class CompleteChart {
 			ArrayList<ArrayList<Edge>> addingArray = new ArrayList<ArrayList<Edge>>();
 			for(int j=0;j<size;j++)
 				addingArray.add(new ArrayList<Edge>());
-			completeEdges.add(addingArray);
-		}
+			this.add(addingArray);
+		};
 	}
 	public ArrayList<Edge> getData(int start,int end){
-		return completeEdges.get(start).get(end);
+		return this.get(start).get(end);
+	}
+	public ArrayList<ArrayList<Edge>> getCol(int start){
+		return this.get(start);
 	}
 
 }

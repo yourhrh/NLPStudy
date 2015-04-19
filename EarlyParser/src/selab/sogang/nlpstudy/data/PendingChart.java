@@ -25,7 +25,7 @@ public class PendingChart {
 		for(Grammar grammar : grammars ){
 			List<String> rhs = grammar.convertToRhs("S");
 			if(rhs != null){
-				processQueue.add(new Edge(0,0, "S", null, rhs));
+				processQueue.add(new Edge(0,0, "S", new ArrayList<String>(), rhs));
 			}
 		}
 	}

@@ -56,7 +56,7 @@ public class GrammarFactory {
 
 				if(newGrammar.get(0).equals(lhs))
 					return newGrammar.subList(1, newGrammar.size());
-				return null;
+				return new ArrayList<String>();
 			
 			}
 			
