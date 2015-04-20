@@ -73,8 +73,7 @@ public class ParsingController {
 		for(Grammar grammar : grammars){
 			List<String> pendingRhs = grammar.convertToRhs(u1);
 			if(pendingRhs.size() != 0){
-				System.out.println(u1+" need Make :" + pendingRhs.toString());
-				PendingChart.getInstance().getProcessQueue().offer(new Edge(edge.getEnd(), edge.getEnd(), u1,new ArrayList<String>(), pendingRhs)); 
+				PendingChart.getInstance().add(new Edge(edge.getEnd(), edge.getEnd(), u1,new ArrayList<String>(), pendingRhs)); 
 			}
 		}
 		CompleteChart.getInstance().addEdges(edge);
@@ -86,26 +85,27 @@ public class ParsingController {
 		
 		boolean adde1 = false;
 		for(ArrayList<Edge> data : col){
-			List<Edge> matchList = data.parallelStream().filter(e2 -> e1.getNotMaking().get(0).equals(((Edge) e2).getTarget())).collect(Collectors.toList());
+			List<Edge> matchList = data.stream().filter(e2 -> e1.getNotMaking().get(0).equals(((Edge) e2).getTarget())).collect(Collectors.toList());
 			
 			if(matchList.size() != 0){
 				adde1 = true;
-				List<Edge> matchEdge = matchList.stream().filter(e2 -> e2.getNotMaking().size() == 0).collect(Collectors.toList());
-				for(Edge match : matchEdge){
-					ArrayList<String> newMaking = new ArrayList<String>();
-					if(e1.getMaking().size() != 0)
-						newMaking.addAll(e1.getMaking());
-					newMaking.add(match.getTarget());
-					
-					List<String> newNotMaking = new ArrayList<String>();
-					if(e1.getNotMaking().size() != 0)
-						newNotMaking.addAll(e1.getNotMaking());
-					newNotMaking.remove(match.getTarget());
-					Edge newEdge = new Edge(e1.getStart(), match.getEnd(), e1.getTarget(),newMaking, newNotMaking);
-					
-					System.out.println("PC 2 : " + newEdge.toString());
-					PendingChart.getInstance().getProcessQueue().offer(newEdge);
-				}
+				matchList.stream().filter(e2 -> e2.getNotMaking().size() == 0)
+						.forEach(match ->{
+							ArrayList<String> newMaking = new ArrayList<String>();
+							if(e1.getMaking().size() != 0)
+								newMaking.addAll(e1.getMaking());
+							newMaking.add(match.getTarget());
+							
+								
+							List<String> newNotMaking = new ArrayList<String>();
+							if(e1.getNotMaking().size() != 0)
+								newNotMaking.addAll(e1.getNotMaking());
+							newNotMaking.remove(match.getTarget());
+							Edge newEdge = new Edge(e1.getStart(), match.getEnd(), e1.getTarget(),newMaking, newNotMaking);
+							
+							
+							PendingChart.getInstance().add( new Edge(e1.getStart(), match.getEnd(), e1.getTarget(),newMaking, newNotMaking));
+						});
 			}
 			
 			
@@ -116,13 +116,14 @@ public class ParsingController {
 		return adde1;
 	}
 
+	// pc1Edge == complete Edge
 	public boolean process1(Edge pc1Edge) {
 		// TODO Auto-generated method stub
 		boolean doProcess1 = false;
-		int j = pc1Edge.getEnd();
+		int j = pc1Edge.getStart();
 		if (pc1Edge.getNotMaking().size() == 0) {
 			doProcess1 = true;
-			for (int i = 0; i < CompleteChart.getInstance().size(); i++) {
+			for (int i = 0; i <= j; i++) {
 				ArrayList<Edge> find = CompleteChart.getInstance()
 						.getData(i, j);
 				find.stream()
@@ -139,30 +140,37 @@ public class ParsingController {
 									notMaking.addAll(edge.getNotMaking());
 									notMaking.remove(0);
 
-									PendingChart.getInstance().getProcessQueue().offer(
+									PendingChart.getInstance().add(
 											new Edge(edge.getStart(), pc1Edge
 													.getEnd(),
 													edge.getTarget(), making,
 													notMaking));
-									CompleteChart.getInstance().addEdges(
-											pc1Edge);
+									
+									
 
 								});
 			}
+			CompleteChart.getInstance().addEdges(
+					pc1Edge);
 		}
 		return doProcess1;
 	}
 	
 	public void parsing(){
+		
 		while(!PendingChart.getInstance().getProcessQueue().isEmpty()){
 			Edge pendingEdge = PendingChart.getInstance().getProcessQueue().poll();
+			System.out.println(pendingEdge.toString());
+			
 			if(!process1(pendingEdge)){
-				System.out.println("Do not Process1");
 				if(!process2(pendingEdge)){
-					System.out.println("Do not Process2");
 					process3(pendingEdge);
 				}
 			}
+			
+			
+			
+
 		}
 		
 	}

@@ -47,10 +47,7 @@ public class TestCase {
 //		assertEquals(expectResult,grammars.get(2).convertToRhs("VP"));
 		
 		
-		for(Grammar grammar : grammars){
-			List<String> rhsDet = grammar.convertToRhs("det");
-			System.out.println(rhsDet.toString());
-		}
+		
 		testMakeUnitEdge(grammars);
 	}
 	private void testMakeUnitEdge(ArrayList<Grammar> grammars){
@@ -120,8 +117,16 @@ public class TestCase {
 //		
 //		
 		parsingController.parsing();
-		if(CompleteChart.getInstance().getData(0, 5).size() == 0){
+		if(CompleteChart.getInstance().getData(0, CompleteChart.getInstance().size()-1).size() == 0){
 			System.out.println("완성된게 없엉.. ㅠㅠ");
+		}
+		else{
+			for(Edge edge : CompleteChart.getInstance().getData(0, CompleteChart.getInstance().size()-1)){
+				System.out.println("완성 Edge");
+				System.out.println(edge.toString());
+				
+				
+			}
 		}
 		
 	}

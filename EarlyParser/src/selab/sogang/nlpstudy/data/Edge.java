@@ -56,7 +56,7 @@ public class Edge {
 		if(making != null)
 			makingToString = making.toString(); 
 		
-		return start + " " + end + " "  + target + "\n" + makingToString + "\n" + notToString; 
+		return start + " " + end + " "  + target + "\n" + makingToString + "\n" + notToString + '\n'; 
 	}
 	public String getTarget() {
 		return target;

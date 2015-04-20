@@ -30,8 +30,7 @@ public class CompleteChart extends ArrayList<ArrayList<ArrayList<Edge>>>{
 		
 		this.get(edge.getStart()).get(edge.getEnd()).add(edge);
 
-		System.out.println(edge.getStart() +"  " +  edge.getEnd() + " "+ edge.getTarget()+ " \n" +edge.getMaking()
-				+ edge.getNotMaking());
+	
 	}
 	
 	public void initCompleteEdges(int size){
