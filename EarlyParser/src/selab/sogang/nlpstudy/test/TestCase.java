@@ -121,7 +121,7 @@ public class TestCase {
 			System.out.println("완성된게 없엉.. ㅠㅠ");
 		}
 		else{
-			for(Edge edge : CompleteChart.getInstance().getData(0, CompleteChart.getInstance().size()-1)){
+			for(Edge edge : CompleteChart.getInstance().getData(1, 3)){
 				System.out.println("완성 Edge");
 				System.out.println(edge.toString());
 				

@@ -44,7 +44,6 @@ public class ParsingController {
 					ArrayList<ArrayList<String>> makings = new ArrayList<ArrayList<String>>();
 					makings.add(rhs);
 					if(lhs != null){
-						System.out.println(rhs.toString());
 						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, makings,new ArrayList<String>()));
 					}
 				}
@@ -83,7 +82,6 @@ public class ParsingController {
 				
 			}
 		}
-		System.out.println("P1");
 		CompleteChart.getInstance().addEdges(edge);
 	}
 
@@ -100,7 +98,6 @@ public class ParsingController {
 				adde1 = true;
 				matchList.stream().filter(e2 -> e2.getNotMaking().size() == 0)
 						.forEach(match ->{
-							System.out.println("P2");
 							boolean added = false;
 							ArrayList<ArrayList<String>> newMaking = new ArrayList<ArrayList<String>>();
 							if(e1.getMaking().size() == 0){
@@ -117,8 +114,7 @@ public class ParsingController {
 							List<String> newNotMaking = new ArrayList<String>();
 							
 							newNotMaking.addAll(e1.getNotMaking());
-							System.out.println(e1.toString());
-							System.out.println("remove :"+ newNotMaking.remove(0));
+							newNotMaking.remove(0);
 							
 							Edge newEdge = new Edge(e1.getStart(), match.getEnd(), e1.getTarget(),newMaking, newNotMaking);
 							for(Edge edge : CompleteChart.getInstance().getData(newEdge.getStart(), newEdge.getEnd())){
@@ -159,7 +155,6 @@ public class ParsingController {
 										.equals(pc1Edge.getTarget()))
 						.forEach(
 								edge -> {
-									System.out.println("P1");
 									ArrayList<ArrayList<String>> making = new ArrayList<ArrayList<String>>();
 									if(edge.getMaking().size() == 0){
 										making.add(new ArrayList<String>());
@@ -168,20 +163,14 @@ public class ParsingController {
 									else{
 										making = copyLists(edge.getMaking());
 										for(ArrayList<String> adding : making){
-											System.out.println("11"+adding.toString());
 											adding.add(pc1Edge.getTarget());
 										}
 									}
-									for(ArrayList<String> ma : making){
-										if(ma.size()>=3)
-											System.out.println("사이즈 3 이상!!!"+ pc1Edge.toString()+ edge.toString());
-									}
-									
 
 									ArrayList<String> notMaking = new ArrayList<String>();
 									notMaking.addAll(edge.getNotMaking());
-									System.out.println(edge.getNotMaking());
-									System.out.println("remove :"+ notMaking.remove(0));
+									
+									notMaking.remove(0);
 
 
 									PendingChart.getInstance().add(
@@ -193,9 +182,7 @@ public class ParsingController {
 			}
 			for(Edge edge : CompleteChart.getInstance().getData(pc1Edge.getStart(), pc1Edge.getEnd())){
 				if(edge.getTarget().equals(pc1Edge.getTarget())&&edge.getNotMaking().equals(pc1Edge.getNotMaking())){
-					System.out.println("edge 병합 들어옴 2");
-					System.out.println(edge.toString());
-					System.out.println(pc1Edge.toString());
+
 					edge.getMaking().addAll(pc1Edge.getMaking());
 					added = true;
 				}
@@ -211,7 +198,6 @@ public class ParsingController {
 		
 		while(!PendingChart.getInstance().getProcessQueue().isEmpty()){
 			Edge pendingEdge = PendingChart.getInstance().getProcessQueue().poll();
-			System.out.println(pendingEdge.toString());
 			
 			if(!process1(pendingEdge)){
 				if(!process2(pendingEdge)){
