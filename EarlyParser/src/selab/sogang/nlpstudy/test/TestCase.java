@@ -73,9 +73,9 @@ public class TestCase {
 		testData.add("NP");
 		ArrayList<String> sGrammar = new ArrayList<String>();
 		sGrammar.add("NP");
-		sGrammar.add("VP");
-		expectedPC.add(new Edge(0,0,"S",new ArrayList<String>(),testData));
-		expectedPC.add(new Edge(0, 0, "S", new ArrayList<String>(), sGrammar));		
+//		sGrammar.add("VP");
+//		expectedPC.add(new Edge(0,0,"S",new ArrayList<String>(),testData));
+//		expectedPC.add(new Edge(0, 0, "S", new ArrayList<String>(), sGrammar));		
 		
 //		assertEquals(expectedPC, pendingChart.getProcessQueue());
 		

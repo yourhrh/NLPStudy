@@ -7,10 +7,10 @@ public class Edge {
 
 	String target;
 	List<String> notMaking;
-	private ArrayList<String> making;
+	private ArrayList<ArrayList<String>> making;
 	int start,end;
 	
-	public Edge(int start,int end,String target,ArrayList<String> making,List<String> rhs){
+	public Edge(int start,int end,String target,ArrayList<ArrayList<String>> making,List<String> rhs){
 		this.start= start;
 		this.end = end;
 		this.target = target;
@@ -22,11 +22,7 @@ public class Edge {
 		// TODO Auto-generated method stub
 		Edge compareEdge = (Edge)obj;
 		
-		System.out.println(compareEdge.start + " " + compareEdge.end + " " + target);
-		if(compareEdge.notMaking != null)
-			System.out.println("NotMaking : " + compareEdge.notMaking.toString());
-		if(compareEdge.making != null)
-			System.out.println("Making : " + compareEdge.making.toString());
+		
 		
 		return start == compareEdge.start&&end == compareEdge.end && 
 				compareEdge.target.equals(target)&&
@@ -40,7 +36,7 @@ public class Edge {
 	public int getEnd() {
 		return end;
 	}
-	public ArrayList<String> getMaking() {
+	public ArrayList<ArrayList<String>> getMaking() {
 		return making;
 	}
 	public List<String> getNotMaking() {
@@ -49,13 +45,14 @@ public class Edge {
 	@Override
 	public String toString(){
 		
-		String notToString = "";
-		String makingToString = "";
+		String notToString = "motMaking : ";
+		String makingToString = "makings : ";
 		if(notMaking != null)
-			notToString = notMaking.toString();
-		if(making != null)
-			makingToString = making.toString(); 
-		
+			notToString += notMaking.toString();
+		if(making.size() != 0){
+			for(ArrayList<String> make : making)
+				makingToString += make.toString() + "\n";
+		}
 		return start + " " + end + " "  + target + "\n" + makingToString + "\n" + notToString + '\n'; 
 	}
 	public String getTarget() {

@@ -41,8 +41,12 @@ public class ParsingController {
 				rhs.add(parsedInput[i]);
 				for(Grammar grammar : grammars){
 					String lhs = grammar.convertToLhs(rhs);
-					if(lhs != null)
-						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, rhs,new ArrayList<String>()));
+					ArrayList<ArrayList<String>> makings = new ArrayList<ArrayList<String>>();
+					makings.add(rhs);
+					if(lhs != null){
+						System.out.println(rhs.toString());
+						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, makings,new ArrayList<String>()));
+					}
 				}
 					
 			}
@@ -71,11 +75,15 @@ public class ParsingController {
 		// TODO Auto-generated method stub
 		String u1 = edge.getNotMaking().get(0);
 		for(Grammar grammar : grammars){
+			
 			List<String> pendingRhs = grammar.convertToRhs(u1);
 			if(pendingRhs.size() != 0){
-				PendingChart.getInstance().add(new Edge(edge.getEnd(), edge.getEnd(), u1,new ArrayList<String>(), pendingRhs)); 
+				ArrayList<ArrayList<String>> makings = new ArrayList<ArrayList<String>>();
+				PendingChart.getInstance().add(new Edge(edge.getEnd(), edge.getEnd(), u1,makings, pendingRhs)); 
+				
 			}
 		}
+		System.out.println("P1");
 		CompleteChart.getInstance().addEdges(edge);
 	}
 
@@ -88,23 +96,41 @@ public class ParsingController {
 			List<Edge> matchList = data.stream().filter(e2 -> e1.getNotMaking().get(0).equals(((Edge) e2).getTarget())).collect(Collectors.toList());
 			
 			if(matchList.size() != 0){
+				
 				adde1 = true;
 				matchList.stream().filter(e2 -> e2.getNotMaking().size() == 0)
 						.forEach(match ->{
-							ArrayList<String> newMaking = new ArrayList<String>();
-							if(e1.getMaking().size() != 0)
-								newMaking.addAll(e1.getMaking());
-							newMaking.add(match.getTarget());
-							
+							System.out.println("P2");
+							boolean added = false;
+							ArrayList<ArrayList<String>> newMaking = new ArrayList<ArrayList<String>>();
+							if(e1.getMaking().size() == 0){
+								newMaking.add(new ArrayList<String>());
+								newMaking.get(0).add(match.getTarget());
+							}
+							else{
+								newMaking = copyLists(match.getMaking());
+								for(ArrayList<String> makings : newMaking){
+									makings.add(match.getTarget());
+								}
+							}
 								
 							List<String> newNotMaking = new ArrayList<String>();
-							if(e1.getNotMaking().size() != 0)
-								newNotMaking.addAll(e1.getNotMaking());
-							newNotMaking.remove(match.getTarget());
+							
+							newNotMaking.addAll(e1.getNotMaking());
+							System.out.println(e1.toString());
+							System.out.println("remove :"+ newNotMaking.remove(0));
+							
 							Edge newEdge = new Edge(e1.getStart(), match.getEnd(), e1.getTarget(),newMaking, newNotMaking);
+							for(Edge edge : CompleteChart.getInstance().getData(newEdge.getStart(), newEdge.getEnd())){
+								if(edge.getTarget().equals(newEdge.getTarget())&&edge.getNotMaking().equals(newEdge.getNotMaking())){
+
+									edge.getMaking().addAll(newEdge.getMaking());
+									added = true;
+								}
+							}
 							
-							
-							PendingChart.getInstance().add( new Edge(e1.getStart(), match.getEnd(), e1.getTarget(),newMaking, newNotMaking));
+							if(!added)
+								PendingChart.getInstance().add(newEdge);
 						});
 			}
 			
@@ -123,6 +149,7 @@ public class ParsingController {
 		int j = pc1Edge.getStart();
 		if (pc1Edge.getNotMaking().size() == 0) {
 			doProcess1 = true;
+			boolean added  = false;
 			for (int i = 0; i <= j; i++) {
 				ArrayList<Edge> find = CompleteChart.getInstance()
 						.getData(i, j);
@@ -132,26 +159,50 @@ public class ParsingController {
 										.equals(pc1Edge.getTarget()))
 						.forEach(
 								edge -> {
-									ArrayList<String> making = new ArrayList<String>();
-									making.addAll(edge.getMaking());
-									making.add(pc1Edge.getTarget());
+									System.out.println("P1");
+									ArrayList<ArrayList<String>> making = new ArrayList<ArrayList<String>>();
+									if(edge.getMaking().size() == 0){
+										making.add(new ArrayList<String>());
+										making.get(0).add(pc1Edge.getTarget());
+									}
+									else{
+										making = copyLists(edge.getMaking());
+										for(ArrayList<String> adding : making){
+											System.out.println("11"+adding.toString());
+											adding.add(pc1Edge.getTarget());
+										}
+									}
+									for(ArrayList<String> ma : making){
+										if(ma.size()>=3)
+											System.out.println("사이즈 3 이상!!!"+ pc1Edge.toString()+ edge.toString());
+									}
+									
 
 									ArrayList<String> notMaking = new ArrayList<String>();
 									notMaking.addAll(edge.getNotMaking());
-									notMaking.remove(0);
+									System.out.println(edge.getNotMaking());
+									System.out.println("remove :"+ notMaking.remove(0));
+
 
 									PendingChart.getInstance().add(
 											new Edge(edge.getStart(), pc1Edge
 													.getEnd(),
 													edge.getTarget(), making,
 													notMaking));
-									
-									
-
 								});
 			}
-			CompleteChart.getInstance().addEdges(
-					pc1Edge);
+			for(Edge edge : CompleteChart.getInstance().getData(pc1Edge.getStart(), pc1Edge.getEnd())){
+				if(edge.getTarget().equals(pc1Edge.getTarget())&&edge.getNotMaking().equals(pc1Edge.getNotMaking())){
+					System.out.println("edge 병합 들어옴 2");
+					System.out.println(edge.toString());
+					System.out.println(pc1Edge.toString());
+					edge.getMaking().addAll(pc1Edge.getMaking());
+					added = true;
+				}
+			}
+			if(!added)
+				CompleteChart.getInstance().addEdges(pc1Edge);
+			
 		}
 		return doProcess1;
 	}
@@ -167,12 +218,20 @@ public class ParsingController {
 					process3(pendingEdge);
 				}
 			}
-			
-			
-			
-
 		}
 		
+	}
+	private ArrayList<ArrayList<String>> copyLists(ArrayList<ArrayList<String>> copyed){
+		ArrayList<ArrayList<String>> returnArray = new ArrayList<ArrayList<String>>();
+		for(ArrayList<String> forCopy : copyed){
+			ArrayList<String> addList = new ArrayList<String>();
+			for(String stringCopy : forCopy){
+				addList.add(stringCopy);
+			}
+			returnArray.add(addList);
+		}
+		
+		return returnArray;
 	}
 	
 	

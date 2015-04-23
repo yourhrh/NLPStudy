@@ -25,7 +25,7 @@ public class PendingChart {
 		for(Grammar grammar : grammars ){
 			List<String> rhs = grammar.convertToRhs("S");
 			if(rhs.size() != 0){
-				this.add(new Edge(0,0, "S", new ArrayList<String>(), rhs));
+				this.add(new Edge(0,0, "S", new ArrayList<ArrayList<String>>(), rhs));
 			}
 		}
 	}
@@ -34,7 +34,7 @@ public class PendingChart {
 	}
 	public void add(Edge edge) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("add Item : " + edge.toString());
 		//중복 제거
 		if(!processQueue.contains(edge))
 			processQueue.add(edge);
