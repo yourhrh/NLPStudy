@@ -45,19 +45,21 @@ public class Edge {
 	@Override
 	public String toString(){
 		
-		String notToString = "motMaking : ";
-		String makingToString = "makings : ";
+		String notToString = "";
+		String makingToString = "[";
 		if(notMaking != null)
 			notToString += notMaking.toString();
 		if(making.size() != 0){
-			for(ArrayList<String> make : making)
-				makingToString += make.toString() + "\n";
+			
+		
+				makingToString += making.toString().replaceAll("\\[\\[","\\(").replaceAll("\\]\\]","\\)\\]");
 		}
-		return start + " " + end + " "  + target + "\n" + makingToString + "\n" + notToString + '\n'; 
+		return start + " " + end + " "  + target + " " + makingToString + " " + notToString; 
 	}
 	public String getTarget() {
 		return target;
 	}
+
 	
 
 

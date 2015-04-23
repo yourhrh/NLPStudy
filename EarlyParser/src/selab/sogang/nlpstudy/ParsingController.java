@@ -1,8 +1,11 @@
 package selab.sogang.nlpstudy;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,6 +21,7 @@ import selab.sogang.nlpstudy.data.PendingChart;
 
 public class ParsingController {
 	
+	public static ArrayList<String> outputText= new ArrayList<String>();;
 	ArrayList<Grammar> grammars;
 	public ParsingController(ArrayList<Grammar> grammars) {
 		// TODO Auto-generated constructor stub
@@ -34,7 +38,7 @@ public class ParsingController {
 			
 			//글자 개수 +1
 			CompleteChart.getInstance().initCompleteEdges(parsedInput.length+1);
-			
+			outputText.add("bottom edge");
 			for(int i=0;i<parsedInput.length;i++){
 				
 				ArrayList<String> rhs = new ArrayList<String>();
@@ -44,11 +48,14 @@ public class ParsingController {
 					ArrayList<ArrayList<String>> makings = new ArrayList<ArrayList<String>>();
 					makings.add(rhs);
 					if(lhs != null){
-						CompleteChart.getInstance().addEdges(new Edge(i,i+1,lhs, makings,new ArrayList<String>()));
+						Edge addEdge = new Edge(i,i+1,lhs, makings,new ArrayList<String>());
+						CompleteChart.getInstance().addEdges(addEdge);
+						outputText.add(addEdge.toString());
 					}
 				}
 					
 			}
+			outputText.add("**parsing start**");	
 			
 			
 			
@@ -102,12 +109,12 @@ public class ParsingController {
 							ArrayList<ArrayList<String>> newMaking = new ArrayList<ArrayList<String>>();
 							if(e1.getMaking().size() == 0){
 								newMaking.add(new ArrayList<String>());
-								newMaking.get(0).add(match.getTarget());
+								newMaking.get(0).add(match.getTarget()+match.getMaking().toString().replaceAll("\\[\\[", "\\(").replaceAll("\\]\\]", "\\)").replace(',', ' '));
 							}
 							else{
 								newMaking = copyLists(match.getMaking());
 								for(ArrayList<String> makings : newMaking){
-									makings.add(match.getTarget());
+									makings.add(match.getTarget()+match.getMaking().toString().replaceAll("\\[\\[", "\\(").replaceAll("\\]\\]", "\\)").replace(',', ' '));
 								}
 							}
 								
@@ -158,12 +165,12 @@ public class ParsingController {
 									ArrayList<ArrayList<String>> making = new ArrayList<ArrayList<String>>();
 									if(edge.getMaking().size() == 0){
 										making.add(new ArrayList<String>());
-										making.get(0).add(pc1Edge.getTarget());
+										making.get(0).add(pc1Edge.getTarget()+pc1Edge.getMaking().toString().replaceAll("\\[\\[", "\\(").replaceAll("\\]\\]", "\\)").replace(',', ' '));
 									}
 									else{
 										making = copyLists(edge.getMaking());
 										for(ArrayList<String> adding : making){
-											adding.add(pc1Edge.getTarget());
+											adding.add(pc1Edge.getTarget()+pc1Edge.getMaking().toString().replaceAll("\\[\\[", "\\(").replaceAll("\\]\\]", "\\)").replace(',', ' '));
 										}
 									}
 
@@ -197,8 +204,10 @@ public class ParsingController {
 	public void parsing(){
 		
 		while(!PendingChart.getInstance().getProcessQueue().isEmpty()){
+			
 			Edge pendingEdge = PendingChart.getInstance().getProcessQueue().poll();
 			
+			outputText.add(pendingEdge.toString());
 			if(!process1(pendingEdge)){
 				if(!process2(pendingEdge)){
 					process3(pendingEdge);
@@ -209,7 +218,7 @@ public class ParsingController {
 	}
 	private ArrayList<ArrayList<String>> copyLists(ArrayList<ArrayList<String>> copyed){
 		ArrayList<ArrayList<String>> returnArray = new ArrayList<ArrayList<String>>();
-		for(ArrayList<String> forCopy : copyed){
+				for(ArrayList<String> forCopy : copyed){
 			ArrayList<String> addList = new ArrayList<String>();
 			for(String stringCopy : forCopy){
 				addList.add(stringCopy);
@@ -218,6 +227,39 @@ public class ParsingController {
 		}
 		
 		return returnArray;
+	}
+	public void writeOutput(){
+		try {
+			File output = new File("./output.txt");
+			
+			output.delete();
+			
+			output.createNewFile();
+			
+			BufferedWriter out = new BufferedWriter(new FileWriter(output));
+			for(String text : outputText ){
+				out.write(text); out.newLine();
+			}
+			
+			List<Edge> finalSentences = CompleteChart.getInstance().getData(0,CompleteChart.getInstance().size()-1).
+					stream().filter(edge -> edge.getTarget().equals("S")&&edge.getNotMaking().size()==0).collect(Collectors.toList());
+			if(finalSentences.size() == 0)
+				out.write("Can't make complete sentence from whole input");
+			else{
+				out.write("**PARSING TREE**");
+				out.newLine();
+				for(Edge sEdge : finalSentences){
+					
+					String sentence = sEdge.getTarget() + sEdge.getMaking().toString().replaceAll("\\[","\\(").replaceAll("\\]","\\)");
+					out.write(sentence);
+				}
+			}
+							
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
