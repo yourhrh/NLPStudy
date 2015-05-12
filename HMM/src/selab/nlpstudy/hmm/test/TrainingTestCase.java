@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -52,8 +53,9 @@ public class TrainingTestCase {
 	private void testCountBigram(){
 		Integer expected = 2;
 		String[] key = {"NNB","JX"};
- 		HashMap<String[],Integer> bigramSet = trainingParser.countBigram(sentence);
- 		assertEquals(bigramSet.get(key), expected);
+		
+ 		HashMap<List<String>,Integer> bigramSet = trainingParser.countBigram(sentence);
+ 		assertEquals(expected ,bigramSet.get(Arrays.asList(key)));
 		
 	}
 	

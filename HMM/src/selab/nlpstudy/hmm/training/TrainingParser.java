@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class TrainingParser {
@@ -44,9 +46,31 @@ public class TrainingParser {
 		return sentence;
 	}
 
-	public HashMap<String[], Integer> countBigram(ArrayList<String> sentence) {
+	public HashMap<List<String>, Integer> countBigram(ArrayList<String> sentence) {
 		// TODO Auto-generated method stub
-		return null;
+		HashMap<List<String>, Integer> bigramMap = new HashMap<List<String>, Integer>();
+		
+		ArrayList<TrainingData> dataSet = makeSentenceToTrainingData(sentence);
+		
+		for(int i=0;i<dataSet.size()-1;i++){
+			String[] bigramData = {dataSet.get(i).morpheme,dataSet.get(i+1).morpheme};
+			List<String> key = Arrays.asList(bigramData);
+			if(bigramMap.containsKey(key)){
+				Integer value = new Integer(bigramMap.get(key).intValue() +1);
+				bigramMap.replace(key, value);
+			}
+			else{
+				bigramMap.put(key, new Integer(1));
+			}				
+		}		
+		return bigramMap;
+	}
+	private ArrayList<TrainingData> makeSentenceToTrainingData(ArrayList<String> sentence){
+		ArrayList<TrainingData> dataSet = new ArrayList<TrainingData>();
+		for(String line : sentence){
+			dataSet.addAll(parseLine(line));
+		}
+		return dataSet;
 	}
 
 }
