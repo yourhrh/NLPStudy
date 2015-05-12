@@ -44,4 +44,9 @@ public class TrainingParser {
 		return sentence;
 	}
 
+	public HashMap<String[], Integer> countBigram(ArrayList<String> sentence) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

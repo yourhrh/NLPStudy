@@ -18,13 +18,16 @@ import selab.nlpstudy.hmm.training.TrainingParser;
 public class TrainingTestCase {
 
 	ArrayList<String> sentence;
+	TrainingParser trainingParser;
 	@Test
 	public void test() {
+		trainingParser = new TrainingParser();
 		testParseLine();
 		testReadSentence();
+		testCountBigram();
+		
 	}
 	private void testParseLine(){
-		TrainingParser trainingParser = new TrainingParser();
 		ArrayList<TrainingData> actualData = trainingParser.parseLine("Àü¾¾	Àü/NNP+¾¾/NNB");
 		TrainingData[] expectedData = new TrainingData[2];
 		expectedData[0] = new TrainingData("Àü","NNP");
@@ -33,7 +36,6 @@ public class TrainingTestCase {
 		assertEquals(expectList, actualData);
 	}
 	private void testReadSentence(){
-		TrainingParser trainingParser = new TrainingParser();
 		String expectString = "Àü¾¾	Àü/NNP+¾¾/NNB";
 		sentence = null;
 		try {
@@ -47,6 +49,14 @@ public class TrainingTestCase {
 		expectString = "ÁÖÀåÇß´Ù.	ÁÖÀå/NNG+ÇÏ/XSV+¾Ò/EP+´Ù/EF+./SF";
 		assertEquals(expectString, sentence.get(sentence.size()-1));
 	}
+	private void testCountBigram(){
+		Integer expected = 2;
+		String[] key = {"NNB","JX"};
+ 		HashMap<String[],Integer> bigramSet = trainingParser.countBigram(sentence);
+ 		assertEquals(bigramSet.get(key), expected);
+		
+	}
+	
 	
 
 }
