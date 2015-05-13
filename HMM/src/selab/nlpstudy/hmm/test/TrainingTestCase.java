@@ -13,31 +13,36 @@ import java.util.List;
 
 import org.junit.Test;
 
+import selab.nlpstudy.hmm.training.TrainingCounter;
 import selab.nlpstudy.hmm.training.TrainingData;
-import selab.nlpstudy.hmm.training.TrainingParser;
+import selab.nlpstudy.hmm.training.TrainingFileInterface;
 
 public class TrainingTestCase {
 
 	ArrayList<String> sentence;
 	ArrayList<ArrayList<String>> sentenceSet;
-	TrainingParser trainingParser;
+	TrainingFileInterface trainingParser;
+	TrainingCounter trainingCounter;
 	@Test
 	public void test() {
-		trainingParser = new TrainingParser();
-		testParseLine();
-		testReadSentence();
-		testCountBigram();
-		testMakeSentenceSet();
+		trainingParser = new TrainingFileInterface();
 		
+		//testParseLine();
+		//testReadSentence();
+		//testCountBigram();
+		testMakeSentenceSet();
+		trainingCounter = new TrainingCounter(sentenceSet);
 	}
+	
 	private void testParseLine(){
-		ArrayList<TrainingData> actualData = trainingParser.parseLine("Àü¾¾	Àü/NNP+¾¾/NNB");
+		ArrayList<TrainingData> actualData = trainingCounter.parseLine("Àü¾¾	Àü/NNP+¾¾/NNB");
 		TrainingData[] expectedData = new TrainingData[2];
 		expectedData[0] = new TrainingData("Àü","NNP");
 		expectedData[1] = new TrainingData("¾¾","NNB");
 		ArrayList<TrainingData> expectList = new ArrayList<TrainingData>(Arrays.asList(expectedData));
 		assertEquals(expectList, actualData);
 	}
+	
 	private void testReadSentence(){
 		String expectString = "Àü¾¾	Àü/NNP+¾¾/NNB";
 		sentence = null;
@@ -52,13 +57,15 @@ public class TrainingTestCase {
 		expectString = "ÁÖÀåÇß´Ù.	ÁÖÀå/NNG+ÇÏ/XSV+¾Ò/EP+´Ù/EF+./SF";
 		assertEquals(expectString, sentence.get(sentence.size()-1));
 	}
+	
 	private void testCountBigram(){
 		Integer expected = 2;
 		String[] key = {"NNB","JX"};
 		
- 		HashMap<List<String>,Integer> bigramSet = trainingParser.countBigram(sentence,null);
+ 		HashMap<List<String>,Integer> bigramSet = trainingCounter.countBigram(sentence,null);
  		assertEquals(expected ,bigramSet.get(Arrays.asList(key)));
 	}
+	
 	private void testMakeSentenceSet(){
 		String expectedFirstString = "Àü¾¾	Àü/NNP+¾¾/NNB";
 		String expectedLastString = "¾ø´Ù.	¾ø/VA+´Ù/EF+./SF";
@@ -66,6 +73,7 @@ public class TrainingTestCase {
 		assertEquals(expectedFirstString, sentenceSet.get(0).get(0));
 		assertEquals(expectedLastString, sentenceSet.get(sentenceSet.size()-1)
 				.get(sentenceSet.get(sentenceSet.size()-1).size()-1));
+		this.trainingCounter = new TrainingCounter(sentenceSet);
 	}
 	
 	
