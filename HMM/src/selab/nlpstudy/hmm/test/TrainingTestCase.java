@@ -56,7 +56,7 @@ public class TrainingTestCase {
 		Integer expected = 2;
 		String[] key = {"NNB","JX"};
 		
- 		HashMap<List<String>,Integer> bigramSet = trainingParser.countBigram(sentence);
+ 		HashMap<List<String>,Integer> bigramSet = trainingParser.countBigram(sentence,null);
  		assertEquals(expected ,bigramSet.get(Arrays.asList(key)));
 	}
 	private void testMakeSentenceSet(){

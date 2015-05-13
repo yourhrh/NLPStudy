@@ -48,9 +48,14 @@ public class TrainingParser {
 		return sentence;
 	}
 
-	public HashMap<List<String>, Integer> countBigram(ArrayList<String> sentence) {
-		// TODO Auto-generated method stub
-		HashMap<List<String>, Integer> bigramMap = new HashMap<List<String>, Integer>();
+	public HashMap<List<String>, Integer> countBigram(ArrayList<String> sentence,HashMap<List<String>, Integer> maked) {
+		
+		
+		HashMap<List<String>, Integer> bigramMap;
+		if(maked != null)
+			bigramMap = maked;
+		else
+			bigramMap= new HashMap<List<String>, Integer>();
 		
 		ArrayList<TrainingData> dataSet = makeSentenceToTrainingData(sentence);
 		
