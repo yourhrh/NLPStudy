@@ -19,6 +19,7 @@ import selab.nlpstudy.hmm.training.TrainingParser;
 public class TrainingTestCase {
 
 	ArrayList<String> sentence;
+	ArrayList<ArrayList<String>> sentenceSet;
 	TrainingParser trainingParser;
 	@Test
 	public void test() {
@@ -26,6 +27,7 @@ public class TrainingTestCase {
 		testParseLine();
 		testReadSentence();
 		testCountBigram();
+		testMakeSentenceSet();
 		
 	}
 	private void testParseLine(){
@@ -56,7 +58,14 @@ public class TrainingTestCase {
 		
  		HashMap<List<String>,Integer> bigramSet = trainingParser.countBigram(sentence);
  		assertEquals(expected ,bigramSet.get(Arrays.asList(key)));
-		
+	}
+	private void testMakeSentenceSet(){
+		String expectedFirstString = "Àü¾¾	Àü/NNP+¾¾/NNB";
+		String expectedLastString = "¾ø´Ù.	¾ø/VA+´Ù/EF+./SF";
+		sentenceSet = trainingParser.makeSentenceSet();
+		assertEquals(expectedFirstString, sentenceSet.get(0).get(0));
+		assertEquals(expectedLastString, sentenceSet.get(sentenceSet.size()-1)
+				.get(sentenceSet.get(sentenceSet.size()-1).size()-1));
 	}
 	
 	
