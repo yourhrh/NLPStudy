@@ -27,11 +27,12 @@ public class TrainingTestCase {
 	public void test() {
 		trainingParser = new TrainingFileInterface();
 		
-		//testParseLine();
+		
 		//testReadSentence();
 		//testCountBigram();
 		testMakeSentenceSet();
 		trainingCounter = new TrainingCounter(sentenceSet);
+		testParseLine();
 		testMakeTrainSet();
 	}
 	
@@ -41,6 +42,9 @@ public class TrainingTestCase {
 		expectedData[0] = new TrainingData("Àü","NNP");
 		expectedData[1] = new TrainingData("¾¾","NNB");
 		ArrayList<TrainingData> expectList = new ArrayList<TrainingData>(Arrays.asList(expectedData));
+		for(TrainingData td : actualData){
+			System.out.println(td.string + " "+ td.morpheme);
+		}
 		assertEquals(expectList, actualData);
 	}
 	

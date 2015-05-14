@@ -49,12 +49,49 @@ public class TrainingCounter {
 		
 		ArrayList<TrainingData> parsedString = new ArrayList<TrainingData>();
  		String[] firstSplit= string.split("\\s+");
-		String rhs = firstSplit[1];
-		String[] morphemies = rhs.split("\\+");
-		for(String morpheme : morphemies){
-			String[] morphemeData = morpheme.split("\\/");
-			parsedString.add(new TrainingData(morphemeData[0], morphemeData[1]));
+		char[] rhs = firstSplit[1].toCharArray();
+		int savePoint = 0;
+		int i =0;
+		while(i<rhs.length){
+			if(rhs[i]== '/'&&i>=1){
+				
+				char[] chank = new char[30];
+				char[] morpheme = new char[10];
+				
+				if(i>=2&& rhs[i-2] != '+'&&rhs[i-1] =='+')
+					continue;	
+				
+				int startingPoint=0;
+				for(int j=savePoint  ; j < i;j++){
+					chank[startingPoint] = rhs[j];
+					startingPoint++;
+				}
+				
+				savePoint = i;
+				startingPoint=0;
+				
+				while(savePoint != rhs.length &&rhs[savePoint]!='+'){
+					morpheme[startingPoint] = rhs[savePoint];
+					startingPoint ++;	savePoint ++;
+				}
+				
+				parsedString.add(new TrainingData(new String(chank),new String(morpheme)));
+				i = savePoint+1;
+			}
+			else
+				i ++;
+			
+			
 		}
+//		String[] morphemies = rhs.split("\\+");
+//		for(String morpheme : morphemies){
+//			String[] morphemeData = morpheme.split("\\/");
+//			for(String a : morphemeData){
+//				System.out.print(a+ " ");
+//			}
+//			System.out.println();
+//			parsedString.add(new TrainingData(morphemeData[0], morphemeData[1]));
+//		}
 		return parsedString;
 	}
 
