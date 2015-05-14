@@ -32,6 +32,7 @@ public class TrainingTestCase {
 		//testCountBigram();
 		testMakeSentenceSet();
 		trainingCounter = new TrainingCounter(sentenceSet);
+		testMakeTrainSet();
 	}
 	
 	private void testParseLine(){
@@ -74,6 +75,16 @@ public class TrainingTestCase {
 		assertEquals(expectedLastString, sentenceSet.get(sentenceSet.size()-1)
 				.get(sentenceSet.get(sentenceSet.size()-1).size()-1));
 		this.trainingCounter = new TrainingCounter(sentenceSet);
+	}
+	private void testMakeTrainSet(){
+		TrainingData expectedFirst = new TrainingData("Àü","NNP");
+		TrainingData expectedLast = new TrainingData(".","SF");
+		
+		ArrayList<TrainingData> trainSet = trainingCounter.makeTrainSet();
+		assertEquals(expectedFirst,trainSet.get(0));
+		assertEquals(expectedLast,trainSet.get(trainSet.size()-1));
+		
+		
 	}
 	
 	

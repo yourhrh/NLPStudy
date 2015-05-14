@@ -9,6 +9,7 @@ public class TrainingCounter {
 	private ArrayList<ArrayList<String>> sentenceSet;
 	
 	
+	
 	public TrainingCounter(ArrayList<ArrayList<String>> sentenceSet) {
 		this.sentenceSet = sentenceSet;
 	}
@@ -55,5 +56,15 @@ public class TrainingCounter {
 			parsedString.add(new TrainingData(morphemeData[0], morphemeData[1]));
 		}
 		return parsedString;
+	}
+
+	public ArrayList<TrainingData> makeTrainSet() {
+		ArrayList<TrainingData> trainSet = new ArrayList<TrainingData>();
+		for(ArrayList<String> sentence : sentenceSet)
+			for(String morphrome : sentence)
+				trainSet.addAll(parseLine(morphrome));
+		
+		
+		return trainSet;
 	}
 }
