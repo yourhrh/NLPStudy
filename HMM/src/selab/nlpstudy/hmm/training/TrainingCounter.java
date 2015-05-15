@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TrainingCounter {
 	private ArrayList<ArrayList<String>> sentenceSet;
-	
+	int count = 0;
 	
 	
 	public TrainingCounter(ArrayList<ArrayList<String>> sentenceSet) {
@@ -53,53 +53,51 @@ public class TrainingCounter {
 		int savePoint = 0;
 		int i =0;
 		while(i<rhs.length){
+			
 			if(rhs[i]== '/'&&i>=1){
 				
-				char[] chank = new char[30];
+				char[] chank = new char[200];
 				char[] morpheme = new char[10];
+				int endChank;
+				int endMorpheme;
 				
-				if(i>=2&& rhs[i-2] != '+'&&rhs[i-1] =='+')
+				if(i>=2&& rhs[i-2] != '+'&&rhs[i-1] =='+'){
+					i++;
 					continue;	
-				
-				int startingPoint=0;
-				for(int j=savePoint  ; j < i;j++){
-					chank[startingPoint] = rhs[j];
-					startingPoint++;
 				}
 				
-				savePoint = i;
-				startingPoint=0;
+				endChank=0;
+				for(int j=savePoint  ; j < i;j++){
+					chank[endChank] = rhs[j];
+					endChank++;
+				}
+				
+				savePoint = i+1;
+				endMorpheme=0;
 				
 				while(savePoint != rhs.length &&rhs[savePoint]!='+'){
-					morpheme[startingPoint] = rhs[savePoint];
-					startingPoint ++;	savePoint ++;
+					morpheme[endMorpheme] = rhs[savePoint];
+					endMorpheme ++;	savePoint ++;
 				}
-				
-				parsedString.add(new TrainingData(new String(chank),new String(morpheme)));
-				i = savePoint+1;
+				parsedString.add(new TrainingData(new String(chank).substring(0, endChank)
+						,new String(morpheme).substring(0,endMorpheme)));
+				savePoint ++ ;
+				i = savePoint;
 			}
 			else
 				i ++;
-			
-			
 		}
-//		String[] morphemies = rhs.split("\\+");
-//		for(String morpheme : morphemies){
-//			String[] morphemeData = morpheme.split("\\/");
-//			for(String a : morphemeData){
-//				System.out.print(a+ " ");
-//			}
-//			System.out.println();
-//			parsedString.add(new TrainingData(morphemeData[0], morphemeData[1]));
-//		}
 		return parsedString;
 	}
 
 	public ArrayList<TrainingData> makeTrainSet() {
 		ArrayList<TrainingData> trainSet = new ArrayList<TrainingData>();
-		for(ArrayList<String> sentence : sentenceSet)
+		for(ArrayList<String> sentence : sentenceSet){
 			for(String morphrome : sentence)
 				trainSet.addAll(parseLine(morphrome));
+			System.out.println(++count);
+		}
+		
 		
 		
 		return trainSet;
