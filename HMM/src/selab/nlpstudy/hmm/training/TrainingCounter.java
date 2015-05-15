@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TrainingCounter {
 	private ArrayList<ArrayList<String>> sentenceSet;
@@ -95,11 +97,25 @@ public class TrainingCounter {
 		for(ArrayList<String> sentence : sentenceSet){
 			for(String morphrome : sentence)
 				trainSet.addAll(parseLine(morphrome));
-			System.out.println(++count);
 		}
 		
 		
 		
 		return trainSet;
 	}
+
+	public Map<String, Long> countMorpheme(
+			ArrayList<TrainingData> trainSet) {
+				
+		return trainSet.stream().collect(Collectors.groupingBy(e-> e.morpheme, Collectors.counting()));
+	}
+
+	public Map<TrainingData, Long> countDependent(
+			ArrayList<TrainingData> trainSet) {
+		
+		
+		return trainSet.stream().collect(Collectors.groupingBy(e-> e, Collectors.counting()));
+	}
 }
+
+
