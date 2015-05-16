@@ -9,19 +9,18 @@ import java.util.stream.Collectors;
 
 public class TrainingCounter {
 	private ArrayList<ArrayList<String>> sentenceSet;
+	private ArrayList<TrainingData> trainSet;
 	int count = 0;
 	
 	
 	public TrainingCounter(ArrayList<ArrayList<String>> sentenceSet) {
 		this.sentenceSet = sentenceSet;
+		makeTrainSet();
 	}
+
 	
 	public HashMap<List<String>, Integer> countBigram(ArrayList<String> sentence,HashMap<List<String>, Integer> maked) {
-		HashMap<List<String>, Integer> bigramMap;
-		if(maked != null)
-			bigramMap = maked;
-		else
-			bigramMap= new HashMap<List<String>, Integer>();
+		HashMap<List<String>, Integer> bigramMap = maked;
 		
 		ArrayList<TrainingData> dataSet = makeSentenceToTrainingData(sentence);
 		
@@ -93,29 +92,31 @@ public class TrainingCounter {
 	}
 
 	public ArrayList<TrainingData> makeTrainSet() {
-		ArrayList<TrainingData> trainSet = new ArrayList<TrainingData>();
+		trainSet = new ArrayList<TrainingData>();
 		for(ArrayList<String> sentence : sentenceSet){
 			for(String morphrome : sentence)
 				trainSet.addAll(parseLine(morphrome));
 		}
-		
-		
-		
 		return trainSet;
 	}
 
-	public Map<String, Long> countMorpheme(
-			ArrayList<TrainingData> trainSet) {
+	public Map<String, Long> countMorpheme() {
 				
 		return trainSet.stream().collect(Collectors.groupingBy(e-> e.morpheme, Collectors.counting()));
 	}
 
-	public Map<TrainingData, Long> countDependent(
-			ArrayList<TrainingData> trainSet) {
+	public Map<TrainingData, Long> countState() {
 		
-		
-		return trainSet.stream().collect(Collectors.groupingBy(e-> e, Collectors.counting()));
+		return trainSet.stream().collect(Collectors.groupingBy(e-> e , Collectors.counting()));
 	}
+	public HashMap<List<String>, Integer> countAllBigram() {
+		HashMap<List<String>, Integer> bigramCount = new HashMap<List<String>, Integer>();
+		for(ArrayList<String> sentence : sentenceSet){
+			countBigram(sentence, bigramCount);
+		}
+		return bigramCount;
+	}
+	
 }
 
 

@@ -11,11 +11,18 @@ public class TrainingData {
 	}
 	@Override
 	public boolean equals(Object arg0) {
-		if (arg0 instanceof TrainingData) {
-			return this.string.equals(((TrainingData)arg0).string) && this.morpheme.equals(((TrainingData)arg0).morpheme);
-		}
-		return false;
 		
+		return arg0.toString().equals(toString());
+	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.string +  "/" + this.morpheme;
+	}
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return toString().hashCode();
 	}
 	
 }

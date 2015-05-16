@@ -36,6 +36,7 @@ public class TrainingTestCase {
 		trainingCounter = new TrainingCounter(sentenceSet);
 		testParseLine();
 		testMakeTrainSet();
+		testCountMorpheme();
 	}
 	
 	private void testParseLine(){
@@ -93,13 +94,13 @@ public class TrainingTestCase {
 	}
 	private void testCountMorpheme(){
 		
-		Long countEC = new Long(259749);
-		Map<String,Long> morphemeCount = trainingCounter.countMorpheme(trainSet);
+		Long countEC = new Long(140416);
+		Map<String,Long> morphemeCount = trainingCounter.countMorpheme();
 		
-		assertEquals(countEC, morphemeCount.get("EC"));
+		assertEquals(countEC, morphemeCount.get("JX"));
 		Long expectedIt = new Long(20659);
-		Map<TrainingData,Long> denpedentCount = trainingCounter.countDependent(trainSet);
-		assertEquals(expectedIt, denpedentCount.get(new TrainingData("¿’", "VV")));
+		Map<TrainingData,Long> denpedentCount = trainingCounter.countState();
+		assertEquals(expectedIt, denpedentCount.get(new TrainingData("¿÷", "VV")));
 	}
 	
 	

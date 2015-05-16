@@ -1,14 +1,17 @@
 package selab.nlpstudy.hmm.training;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class TrainingFileInterface {
@@ -53,6 +56,35 @@ public class TrainingFileInterface {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void makeTrainingDataFile(){
+		TrainingCounter counter = new TrainingCounter(makeSentenceSet());
+		HashMap<List<String>, Integer> bigramCount = counter.countAllBigram();
+		Map<String, Long> morphemeCount = counter.countMorpheme();
+		Map<TrainingData,Long> stateCount = counter.countState();
+		
+		writeFile(bigramCount,"./BigramCount.txt");
+		writeFile(morphemeCount,"./MorphemeCount.txt");
+		writeFile(stateCount,"./StateCount.txt");
+	}
+	private void writeFile(Map<?, ?> readData, String fileName){
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fileName)));
+			writer.flush();
+			readData.forEach((key,count) -> {
+				try {
+					writer.write(key.toString() + " " + count.toString());
+					writer.newLine();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
