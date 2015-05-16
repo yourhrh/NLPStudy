@@ -17,7 +17,7 @@ public class TrainingData {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.string +  "/" + this.morpheme;
+		return this.string +  " " + this.morpheme;
 	}
 	@Override
 	public int hashCode() {
