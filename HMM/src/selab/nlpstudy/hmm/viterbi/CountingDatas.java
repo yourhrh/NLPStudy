@@ -15,10 +15,12 @@ public class CountingDatas {
 
 	HashMap<String, Integer> morphemeCount;
 	HashMap<ArrayList<String>,Integer> bigramCount;
+	HashMap<TrainingData, Integer> stateCount;
 	public void parsingCountingDatas() {
 		// TODO Auto-generated method stub
 		morphemeCount = new HashMap<String, Integer>();
 		bigramCount = new HashMap<ArrayList<String>, Integer>();
+		stateCount = new HashMap<TrainingData, Integer>();
 		
 		readDatatoHashMap("./MorphemeCount.txt", (s) -> {
 			String[] morphemeData = s.split("\\s+");
@@ -35,16 +37,21 @@ public class CountingDatas {
 			bigramCount.put(bigramList, Integer.parseInt(bigramData[2]));
 			return null;
 		});
+		readDatatoHashMap("./StateCount.txt", s-> {
+			String[] stateData = s.split("\\s+");
+			stateCount.put(new TrainingData(stateData[0], stateData[1]), Integer.parseInt(stateData[2]));
+ 			return null;
+		});
 		
 		
 	}
 	
-	private void readDatatoHashMap(String fileName,Function<String, Void> makeHashMap){
+	private void readDatatoHashMap(String fileName,Function<String, Void> makeFunction){
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
 			String s;
 			while((s = reader.readLine()) != null)
-				makeHashMap.apply(s);
+				makeFunction.apply(s);
 		}catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +73,7 @@ public class CountingDatas {
 
 	public HashMap<TrainingData, Integer> getStateCount() {
 		// TODO Auto-generated method stub
-		return null;
+		return stateCount;
 	}
 
 }
