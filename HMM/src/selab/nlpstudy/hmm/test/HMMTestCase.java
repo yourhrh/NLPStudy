@@ -15,8 +15,8 @@ public class HMMTestCase {
 	CountingDatas countingDatas;
 	@Test
 	public void testReadTrainDatas(){
-		countingDatas = new CountingDatas();
-		countingDatas.parsingCountingDatas();
+		
+		countingDatas = CountingDatas.parsingCountingDatas();
 		
 		HashMap<String,Integer> morphemeCount = countingDatas.getMorphemeCount();
 		assertEquals(new Integer(74462), morphemeCount.get("VX"));
@@ -28,7 +28,6 @@ public class HMMTestCase {
 		
 		HashMap<TrainingData,Integer> stateCount = countingDatas.getStateCount();
 		assertEquals(new Integer(4),stateCount.get(new TrainingData("PPM", "SL")));
-		
 		
 	}
 	@Test

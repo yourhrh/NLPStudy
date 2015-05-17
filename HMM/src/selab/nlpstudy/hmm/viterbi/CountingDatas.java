@@ -16,8 +16,14 @@ public class CountingDatas {
 	HashMap<String, Integer> morphemeCount;
 	HashMap<ArrayList<String>,Integer> bigramCount;
 	HashMap<TrainingData, Integer> stateCount;
-	public void parsingCountingDatas() {
-		// TODO Auto-generated method stub
+	
+	
+	private static class InstanceHolder{
+		
+		private static CountingDatas uniqueInstance = new CountingDatas();
+	}
+	
+	private CountingDatas(){
 		morphemeCount = new HashMap<String, Integer>();
 		bigramCount = new HashMap<ArrayList<String>, Integer>();
 		stateCount = new HashMap<TrainingData, Integer>();
@@ -42,7 +48,12 @@ public class CountingDatas {
 			stateCount.put(new TrainingData(stateData[0], stateData[1]), Integer.parseInt(stateData[2]));
  			return null;
 		});
-		
+	}
+	
+ 	
+	public static CountingDatas parsingCountingDatas() {
+		// TODO Auto-generated method stub
+		return InstanceHolder.uniqueInstance;		
 		
 	}
 	
