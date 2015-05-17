@@ -9,12 +9,13 @@ import org.junit.Test;
 
 import selab.nlpstudy.hmm.training.TrainingData;
 import selab.nlpstudy.hmm.viterbi.CountingDatas;
+import selab.nlpstudy.hmm.viterbi.ProbabilityCalculater;
 
 public class HMMTestCase {
-
+	CountingDatas countingDatas;
 	@Test
 	public void testReadTrainDatas(){
-		CountingDatas countingDatas = new CountingDatas();
+		countingDatas = new CountingDatas();
 		countingDatas.parsingCountingDatas();
 		
 		HashMap<String,Integer> morphemeCount = countingDatas.getMorphemeCount();
@@ -29,6 +30,13 @@ public class HMMTestCase {
 		assertEquals(new Integer(4),stateCount.get(new TrainingData("PPM", "SL")));
 		
 		
+	}
+	@Test
+	public void testCalcuStateProb(){
+		ProbabilityCalculater calculater = new ProbabilityCalculater();
+		double logProbability = calculater.calcuStateProb("PPM","SW");
+		double expected = -8.36;
+		assertEquals(expected, Double.parseDouble(String.format("%.2f", logProbability)));
 	}
 
 
