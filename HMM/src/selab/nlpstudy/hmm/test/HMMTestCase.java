@@ -42,5 +42,9 @@ public class HMMTestCase {
 		double transProbability = calculater.calcuTransProb("SS","SL");
 		System.out.println("Trans prob:" +  transProbability);
 	}
-
+	@Test
+	public void testReadInput(){
+		ArrayList<ArrayList<ArrayList<ArrayList<TrainingData>>>> inputSet =  CountingDatas.parsingCountingDatas().readToTrainInput();
+		assertEquals("¾È³ç",inputSet.get(0).get(0).get(0).get(0).string);
+	}
 }

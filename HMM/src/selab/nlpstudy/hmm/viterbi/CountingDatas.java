@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 
+
+import selab.nlpstudy.hmm.training.TrainingCounter;
 import selab.nlpstudy.hmm.training.TrainingData;
 
 public class CountingDatas {
@@ -28,13 +30,13 @@ public class CountingDatas {
 		bigramCount = new HashMap<ArrayList<String>, Integer>();
 		stateCount = new HashMap<TrainingData, Integer>();
 		
-		readDatatoHashMap("./MorphemeCount.txt", (s) -> {
+		readDatatoDateStructure("./MorphemeCount.txt", (s) -> {
 			String[] morphemeData = s.split("\\s+");
 			morphemeCount.put(morphemeData[0],Integer.parseInt(morphemeData[1]));
 			return null;
 		});
 		
-		readDatatoHashMap("./BigramCount.txt", (s) -> {
+		readDatatoDateStructure("./BigramCount.txt", (s) -> {
 			String changed = s.replaceAll("\\[","").replaceAll(",", "").replaceAll("\\]", "");
 			ArrayList<String> bigramList = new ArrayList<String>(); 
 			String[] bigramData = changed.split("\\s+");
@@ -43,7 +45,7 @@ public class CountingDatas {
 			bigramCount.put(bigramList, Integer.parseInt(bigramData[2]));
 			return null;
 		});
-		readDatatoHashMap("./StateCount.txt", s-> {
+		readDatatoDateStructure("./StateCount.txt", s-> {
 			String[] stateData = s.split("\\s+");
 			stateCount.put(new TrainingData(stateData[0], stateData[1]), Integer.parseInt(stateData[2]));
  			return null;
@@ -57,34 +59,76 @@ public class CountingDatas {
 		
 	}
 	
-	private void readDatatoHashMap(String fileName,Function<String, Void> makeFunction){
+	private void readDatatoDateStructure(String fileName,Function<String, Void> makeFunction){
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
 			String s;
 			while((s = reader.readLine()) != null)
 				makeFunction.apply(s);
 		}catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public HashMap<String, Integer> getMorphemeCount() {
-		// TODO Auto-generated method stub
 		return morphemeCount;
 	}
 
 	public HashMap<ArrayList<String>, Integer> getBigramCount() {
-		// TODO Auto-generated method stub
 		return bigramCount;
 	}
 
 	public HashMap<TrainingData, Integer> getStateCount() {
-		// TODO Auto-generated method stub
 		return stateCount;
 	}
+
+
+	public ArrayList<ArrayList<ArrayList<ArrayList<TrainingData>>>> readToTrainInput() {
+		ArrayList<ArrayList<ArrayList<ArrayList<TrainingData>>>> trainInput = 
+				new ArrayList<ArrayList<ArrayList<ArrayList<TrainingData>>>>();
+		try{
+			BufferedReader reader = new BufferedReader(new FileReader(new File("./HMM/result.txt")));
+			String s;
+			int sentenceIndex= 0;
+			int seperateIndex = -1;
+			trainInput.add(new ArrayList<ArrayList<ArrayList<TrainingData>>>());
+			while((s= reader.readLine()) !=null){
+				System.out.println(sentenceIndex + " " + seperateIndex);
+				System.out.println("s : " +s);
+				if(s.equals("")){
+					sentenceIndex++;
+					seperateIndex = -1;
+					trainInput.add(new ArrayList<ArrayList<ArrayList<TrainingData>>>());
+				}
+				else{
+					if(!s.contains(".")&&!s.contains("\\/")&&!s.contains("\\+"))
+						continue;
+					if(s.contains("1.")){
+						trainInput.get(sentenceIndex).add(new ArrayList<ArrayList<TrainingData>>());
+						seperateIndex ++;
+					}
+					System.out.println(sentenceIndex + " " + seperateIndex);
+					
+					String[] line = s.split("\\.\\s+");
+					TrainingCounter.parseRhs(line[1].toCharArray());
+					trainInput.get(sentenceIndex).get(seperateIndex).add(TrainingCounter.parseRhs(line[1].toCharArray()));
+				}
+				
+					
+			}
+			
+		}catch (FileNotFoundException e){	
+			e.printStackTrace();
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		
+		return trainInput;
+	}
+
+
 
 }

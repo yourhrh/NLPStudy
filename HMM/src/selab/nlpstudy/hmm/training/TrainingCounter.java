@@ -46,11 +46,43 @@ public class TrainingCounter {
 		return dataSet;
 	}
 	
-	public ArrayList<TrainingData> parseLine(String string) {
+	public static ArrayList<TrainingData> parseLine(String string) {
 		
-		ArrayList<TrainingData> parsedString = new ArrayList<TrainingData>();
+		
  		String[] firstSplit= string.split("\\s+");
 		char[] rhs = firstSplit[1].toCharArray();
+		
+		return parseRhs(rhs);
+	}
+
+	public ArrayList<TrainingData> makeTrainSet() {
+		trainSet = new ArrayList<TrainingData>();
+		for(ArrayList<String> sentence : sentenceSet){
+			for(String morphrome : sentence)
+				trainSet.addAll(parseLine(morphrome));
+		}
+		return trainSet;
+	}
+
+	public Map<String, Long> countMorpheme() {
+				
+		return trainSet.stream().collect(Collectors.groupingBy(e-> e.morpheme, Collectors.counting()));
+	}
+
+	public Map<TrainingData, Long> countState() {
+		
+		return trainSet.stream().collect(Collectors.groupingBy(e-> e , Collectors.counting()));
+	}
+	
+	public HashMap<List<String>, Integer> countAllBigram() {
+		HashMap<List<String>, Integer> bigramCount = new HashMap<List<String>, Integer>();
+		for(ArrayList<String> sentence : sentenceSet){
+			countBigram(sentence, bigramCount);
+		}
+		return bigramCount;
+	}
+	public  static ArrayList<TrainingData> parseRhs(char[] rhs){
+		ArrayList<TrainingData> parsedString = new ArrayList<TrainingData>();
 		int savePoint = 0;
 		int i =0;
 		while(i<rhs.length){
@@ -90,33 +122,6 @@ public class TrainingCounter {
 		}
 		return parsedString;
 	}
-
-	public ArrayList<TrainingData> makeTrainSet() {
-		trainSet = new ArrayList<TrainingData>();
-		for(ArrayList<String> sentence : sentenceSet){
-			for(String morphrome : sentence)
-				trainSet.addAll(parseLine(morphrome));
-		}
-		return trainSet;
-	}
-
-	public Map<String, Long> countMorpheme() {
-				
-		return trainSet.stream().collect(Collectors.groupingBy(e-> e.morpheme, Collectors.counting()));
-	}
-
-	public Map<TrainingData, Long> countState() {
-		
-		return trainSet.stream().collect(Collectors.groupingBy(e-> e , Collectors.counting()));
-	}
-	public HashMap<List<String>, Integer> countAllBigram() {
-		HashMap<List<String>, Integer> bigramCount = new HashMap<List<String>, Integer>();
-		for(ArrayList<String> sentence : sentenceSet){
-			countBigram(sentence, bigramCount);
-		}
-		return bigramCount;
-	}
-	
 }
 
 
