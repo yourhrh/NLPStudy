@@ -58,7 +58,6 @@ public class CountingDatas {
 		return InstanceHolder.uniqueInstance;		
 		
 	}
-	
 	private void readDatatoDateStructure(String fileName,Function<String, Void> makeFunction){
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));

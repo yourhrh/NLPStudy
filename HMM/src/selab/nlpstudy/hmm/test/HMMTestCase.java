@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import selab.nlpstudy.hmm.training.TrainingData;
 import selab.nlpstudy.hmm.viterbi.CountingDatas;
+import selab.nlpstudy.hmm.viterbi.HmmNodes;
 import selab.nlpstudy.hmm.viterbi.ProbabilityCalculater;
 
 public class HMMTestCase {
@@ -46,5 +47,11 @@ public class HMMTestCase {
 	public void testReadInput(){
 		ArrayList<ArrayList<ArrayList<ArrayList<TrainingData>>>> inputSet =  CountingDatas.parsingCountingDatas().readToTrainInput();
 		assertEquals("¾È³ç",inputSet.get(0).get(0).get(0).get(0).string);
+	}
+	@Test
+	public void testMakeHmmNodes(){
+		HmmNodes hmmNodes = new HmmNodes(CountingDatas.parsingCountingDatas().readToTrainInput());
+		double tested = hmmNodes.getSentence(0).get(0).get(0).getProb();
+		System.out.println("tested : "+tested);
 	}
 }
