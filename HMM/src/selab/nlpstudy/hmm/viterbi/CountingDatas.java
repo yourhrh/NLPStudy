@@ -94,8 +94,6 @@ public class CountingDatas {
 			int seperateIndex = -1;
 			trainInput.add(new ArrayList<ArrayList<ArrayList<TrainingData>>>());
 			while((s= reader.readLine()) !=null){
-				System.out.println(sentenceIndex + " " + seperateIndex);
-				System.out.println("s : " +s);
 				if(s.equals("")){
 					sentenceIndex++;
 					seperateIndex = -1;
@@ -104,11 +102,10 @@ public class CountingDatas {
 				else{
 					if(!s.contains(".")&&!s.contains("\\/")&&!s.contains("\\+"))
 						continue;
-					if(s.contains("1.")){
+					if(s.contains(" 1. ")){
 						trainInput.get(sentenceIndex).add(new ArrayList<ArrayList<TrainingData>>());
 						seperateIndex ++;
 					}
-					System.out.println(sentenceIndex + " " + seperateIndex);
 					
 					String[] line = s.split("\\.\\s+");
 					TrainingCounter.parseRhs(line[1].toCharArray());

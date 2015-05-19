@@ -15,6 +15,7 @@ import selab.nlpstudy.hmm.viterbi.ProbabilityCalculater;
 public class HMMTestCase {
 	CountingDatas countingDatas;
 	ProbabilityCalculater calculater = new ProbabilityCalculater();
+	HmmNodes hmmNodes = new HmmNodes(CountingDatas.parsingCountingDatas().readToTrainInput());
 	@Test
 	public void testReadTrainDatas(){
 		
@@ -50,8 +51,10 @@ public class HMMTestCase {
 	}
 	@Test
 	public void testMakeHmmNodes(){
-		HmmNodes hmmNodes = new HmmNodes(CountingDatas.parsingCountingDatas().readToTrainInput());
-		double tested = hmmNodes.getSentence(0).get(0).get(0).getProb();
-		System.out.println("tested : "+tested);
+		
+	}
+	@Test
+	public void testCalculateAll(){
+		hmmNodes.calculateAll();
 	}
 }
