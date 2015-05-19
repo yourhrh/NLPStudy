@@ -1,5 +1,9 @@
 package selab.nlpstudy.hmm.viterbi;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import selab.nlpstudy.hmm.training.TrainingData;
@@ -90,22 +94,39 @@ public class HmmNodes {
 
 	public void calculateAll() {
 		// TODO Auto-generated method stub
-		for(ArrayList<ArrayList<SeperateData>> sentence : nodeList){
-			for(int i=0;i<sentence.size()-1;i++)
-				for(SeperateData prevData : sentence.get(i))
-					for(SeperateData postData : sentence.get(i+1)){
-						postData.setPrevProb(prevData);
-					}
-			
-			if(sentence.size() > 0 ){
-				SeperateData maxData = sentence.get(sentence.size()-1).stream()
-					.max((data1,data2) -> Double.compare(data1.getAllProb(), data2.getAllProb())).get();
-				System.out.println(maxData);
-
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(new File("pos_result.txt")));
+			writer.flush();
+			for(ArrayList<ArrayList<SeperateData>> sentence : nodeList){
+				for(int i=0;i<sentence.size()-1;i++)
+					for(SeperateData prevData : sentence.get(i))
+						for(SeperateData postData : sentence.get(i+1)){
+							postData.setPrevProb(prevData);
+						}
+				
+				if(sentence.size() > 0 ){
+					SeperateData maxData = sentence.get(sentence.size()-1).stream()
+						.max((data1,data2) -> Double.compare(data1.getAllProb(), data2.getAllProb())).get();
+					saveFile(writer, maxData.toString());
+				}
 			}
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
+	}
+	private void saveFile(BufferedWriter writer, String s){
+		try {
+			writer.write(s);
+			writer.newLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
